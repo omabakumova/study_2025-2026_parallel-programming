@@ -37,7 +37,6 @@ program dice_probability
     
     theoretical_prob = 5.0 / 18.0  ! Теоретическое значение
     
-    ! Вывод результатов
     print *, 'Моделирование вероятности P(A|B)'
     print *, '================================'
     print *, 'Количество испытаний: ', n_trials
@@ -53,8 +52,8 @@ contains
 
     ! Подпрограмма для генерации случайного числа от 1 до 6 (бросок кости)
     subroutine random_dice(dice_value)
-        integer, intent(out) :: dice_value
-        real :: r
+        integer, intent(out) :: dice_value ! переменная будет выходным результатом
+        real :: r ! вещественная переменная r для хранения числа от 0.0 до 1.0
         
         call random_number(r)
         dice_value = 1 + floor(6 * r)

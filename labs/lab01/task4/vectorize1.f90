@@ -1,6 +1,6 @@
 program vectorize_loop
     implicit none
-    real, dimension(7) :: a, b
+    real, dimension(7) :: a, b ! Объявление массивов из 7 элементов
     real :: result
     integer :: i
     

@@ -18,7 +18,7 @@ program queue
     ! Выделение памяти для очереди
     if (.not. allocated(Q)) allocate(Q(2*n))
     
-    ! Открываем файл для записи данных графика (только для первой успешной траектории)
+    ! Открываем файл для записи данных (только для первой успешной траектории)
     filename = "trajectory_data.txt"
     open(newunit=file_unit, file=filename, status='replace')
     
@@ -41,7 +41,7 @@ program queue
         success = .true.
         
         do i = 1, 2*n
-            current_sum = current_sum + Q(i)
+            current_sum = current_sum + Q(i) ! проъодим по очереди и суммируем
             
             ! Если сумма стала положительной - кто-то ждет сдачу
             if (current_sum > 0) then
@@ -55,26 +55,23 @@ program queue
         if (success) then
             count_success = count_success + 1
             
-            ! Записываем данные первой успешной траектории для графика
+            ! Записываем данные первой успешной траектории 
             if (count_success == 1) then
                 current_sum = 0
                 do i = 1, 2*n
                     current_sum = current_sum + Q(i)
-                    write(file_unit, *) i, current_sum
+                    write(file_unit, *) i, current_sum ! записываем номер покупателя и сумму
                 end do
             end if
         end if
         
     end do trials_loop
     
-    ! Закрываем файл
     close(file_unit)
     
-    ! Вычисляем вероятность
     probability = real(count_success) / real(total_trials)
     theoretical_prob = 1.0 / (n + 1)
     
-    ! Вывод результатов
     print *, "Результаты моделирования:"
     print *, "Длина очереди: ", 2*n
     print *, "Количество испытаний: ", total_trials
@@ -90,20 +87,20 @@ contains
     
     subroutine shuffle_queue(Q)
         implicit none
-        integer(int8), dimension(:), intent(inout) :: Q
-        integer(int8) :: itemp
-        real :: u
-        integer :: i, j, m, k
+        integer(int8), dimension(:), intent(inout) :: Q ! массив Q передается для чтения и изменения
+        integer(int8) :: itemp ! Временная переменная для обмена
+        real :: u ! Случайное число [0, 1)
+        integer :: i, j, m, k ! Счетчики циклов и индексы
         
         m = size(Q)
         
         do k = 1, 2  ! Двойное перемешивание для случайности
             do i = 1, m
-                call random_number(u)
+                call random_number(u) ! u = случайное число [0, 1)
                 j = 1 + floor(m * u)  ! Случайный индекс от 1 до m
-                itemp = Q(j)
-                Q(j) = Q(i)
-                Q(i) = itemp
+                itemp = Q(j) ! Сохраняем значение Q[j] во временную переменную
+                Q(j) = Q(i) ! Записываем Q[i] в позицию Q[j]
+                Q(i) = itemp ! Записываем сохраненное значение в Q[i]
             end do
         end do
     end subroutine shuffle_queue

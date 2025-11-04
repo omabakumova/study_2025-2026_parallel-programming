@@ -1,7 +1,6 @@
 program cards_probability
     implicit none
     
-    ! Параметры программы
     integer, parameter :: num_cards = 36
     integer, parameter :: num_aces = 4
     integer, parameter :: num_trials = 100000
@@ -11,7 +10,6 @@ program cards_probability
         "T♦","K♦","Д♦","В♦","6♦","7♦","8♦","9♦","10♦", &
         "T♣","K♣","Д♣","В♣","6♣","7♣","8♣","9♣","10♣"]
     
-    ! Переменные для подсчета
     integer :: i, trial
     integer :: count_A = 0      ! Счетчик события A (вторая карта - туз)
     integer :: count_B = 0      ! Счетчик события B (первая карта - туз)
@@ -32,8 +30,6 @@ program cards_probability
         ! Перемешиваем колоду
         call shuffle_deck(deck)
         
-        ! Проверяем события
-        
         ! Событие A: вторая карта - туз
         if (is_ace(deck(2))) then
             count_A = count_A + 1
@@ -50,11 +46,9 @@ program cards_probability
         end if
     end do
     
-    ! Вычисление вероятностей
     prob_A = real(count_A) / real(num_trials)
     prob_A_given_B = real(count_AB) / real(count_B)
     
-    ! Вывод результатов
     print *, 'Результаты моделирования (', num_trials, ' испытаний):'
     print *, '--------------------------------------------------'
     print *, 'Безусловная вероятность P(A):'
@@ -81,8 +75,8 @@ end function is_ace
 ! Подпрограмма для перемешивания колоды
 subroutine shuffle_deck(deck)
     implicit none
-    character(len=*), dimension(:), intent(inout) :: deck
-    character(len=len(deck(1))) :: temp
+    character(len=*), dimension(:), intent(inout) :: deck 
+    character(len=len(deck(1))) :: temp ! длина берется от 1-го элемента массива
     real :: u
     integer :: i, j, n, m, k
     
@@ -93,7 +87,7 @@ subroutine shuffle_deck(deck)
         do i = 1, m
             call random_number(u)
             j = n + floor((m + 1 - n) * u)
-            temp = deck(j)
+            temp = deck(j) ! карта из случайно позиции j  во временную переменную
             deck(j) = deck(i)
             deck(i) = temp
         end do
