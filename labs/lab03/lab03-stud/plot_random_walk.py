@@ -19,37 +19,30 @@ plt.rcParams.update({
     "grid.color": 'gray',
 })
 
-# Чтение данных
 data = pd.read_csv('random_walk_results.csv')
 
-# Извлечение значений
 start_sum = data['start_sum'].iloc[0]
 winrate = data['winrate'].iloc[0]
 avg_rounds = data['avg_rounds'].iloc[0]
 avg_rounds_theoretical = data['avg_rounds_theoretical'].iloc[0]
 diff = data['diff'].iloc[0]
 
-# Создание графика
 fig = plt.figure(figsize=(8, 5), dpi=300)
 ax = fig.add_subplot(1, 1, 1)
 
-# Столбцы: эмпирическое и теоретическое среднее число раундов
 labels = ['Эмпирическое среднее', 'Теоретическое среднее']
 values = [avg_rounds, avg_rounds_theoretical]
 colors = ['lightblue', 'lightgreen']
 
 bars = ax.bar(labels, values, color=colors, alpha=0.8)
 
-# Подписи значений над столбцами
 for bar, val in zip(bars, values):
     ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.5,
             f'{val:.2f}', ha='center', va='bottom')
 
-# Добавление информации о вероятности выигрыша в заголовок или аннотацию
 ax.set_ylabel('Среднее число раундов')
 ax.set_title(f'Случайное блуждание: старт = {start_sum}, p = 0.45\nЧастота выигрыша = {winrate:.6f}')
 
-# Сохранение
 fig.savefig('random_walk_results.png', dpi=300, format='png', bbox_inches='tight', pad_inches=0.2)
 fig.savefig('random_walk_results.pgf', dpi=300, format='pgf', bbox_inches='tight', pad_inches=0.2)
 

@@ -1,10 +1,9 @@
 program token_game
   use iso_fortran_env, only: int64, real64
-  use omp_lib                 ! <- важно для OpenMP функций
+  use omp_lib              
   use random
   implicit none
 
-  ! Константы как переменные (не parameter!)
   integer :: x0 = 3, y0 = 4, z0 = 5
   integer(int64) :: n_trials = 1000000_int64
 
@@ -13,7 +12,6 @@ program token_game
   integer(int64) :: total_rounds
   real(real64) :: avg_rounds, theoretical
 
-  ! Получаем число потоков
   n_threads = omp_get_max_threads()
   allocate(rounds_per_thread(0:n_threads-1))
   rounds_per_thread = 0_int64

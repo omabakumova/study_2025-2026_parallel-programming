@@ -10,7 +10,6 @@ plt.rcParams.update({
   "font.serif": ['Times New Roman'],
   "font.sans-serif": ['Arial'],
   "font.family": 'serif',
-  # не использовать настройки шрифтов самого matplotlib
   "pgf.rcfonts": False,
   "pgf.texsystem": 'xelatex',
   "xtick.minor.visible": True,

@@ -44,6 +44,7 @@ ax01.set_title("Вероятность выигрыша в задаче Монт
 ax01.set_ylim(0, 1.0)
 ax01.legend()
 
+# Сохраняем графики
 fig01.savefig('montyhall_results.png', dpi=300, format='png', bbox_inches='tight', pad_inches=0.2)
 fig01.savefig('montyhall_results.pgf', dpi=300, format='pgf', bbox_inches='tight', pad_inches=0.2)
 
