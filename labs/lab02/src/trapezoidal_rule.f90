@@ -1,4 +1,4 @@
-module trapezoidal_rule
+﻿module trapezoidal_rule
   use iso_fortran_env, only : int32, int64, real32, real64
   implicit none
 
@@ -25,28 +25,28 @@ module trapezoidal_rule
   !----------------------------------------------------------------
   function trapezoidal(func, a, b, n, threads_num) result (res)
     implicit none
-    procedure(f) :: func
+    procedure(f) :: func ! должна быть чистой функцией одной переменной
     real(real64), intent(in) :: a, b
     integer(int64), intent(in) :: n
     integer(int64), intent(in) :: threads_num
     real(real64) :: res
-    
-    real(real64) :: h, sum_val
+
+    real(real64) :: h ! шаг интегрирования
+    real(real64) :: sum_val ! накопительная сумма
     integer(int64) :: i
     
-    h = (b - a) / n
-    
-    ! Инициализируем сумму с граничными точками
-    sum_val = 0.5_real64 * (func(a) + func(b)) ! это половины значений на концах отрезка.
-    
-    !$omp parallel do num_threads(int(threads_num)) &
-    !$omp reduction(+:sum_val)
+    ! Вычисление шага
+    h = (b - a) / dble(n)
+    ! Инициализация суммы. Здесь сразу добавляются граничные члены с коэффициентом 0.5.
+    sum_val = 0.5_real64 * func(a) + 0.5_real64 * func(b)
+    ! Параллельный цикл для суммы внутренних точек с редукцией
+    !$omp parallel do num_threads(int(threads_num)) reduction(+:sum_val)
     do i = 1, n-1
-    	sum_val = sum_val + func(a + i * h)
+    !  накопительной сумме значение подынтегральной функции func, вычисленное в одной из внутренних точек разбиения отрезка интегрирования [a,b] 
+      sum_val = sum_val + func(a + real(i, real64) * h)
     end do
     !$omp end parallel do
-    res = h * sum_val ! Умножаем накопленную сумму на шаг h — получаем приближённое значение интеграла
-    
+    res = h * sum_val
   end function trapezoidal
 
 end module trapezoidal_rule
